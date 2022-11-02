@@ -17,9 +17,19 @@ You can test the events API endpoint at: [http://localhost:3000/api/events](http
 
 ## Frontend
 
-This application was built using React and Next.js. Next.js uses file-based routing, so the main entry point to the events dashboard is found at /pages/events/index.js. In this component, I used React Query to fetch and cache the data from the 
+This application was built using React and Next.js. Next.js uses file-based routing, so the main entry point to the events dashboard is found at /pages/events/index.js. In this component, I used React Query to fetch and cache the data from the server and handle mutations. 
+
+All of the UI components for the summary, filters, and table sections can be found in the /components directory. 
+
+For the UI, I used Tailwind CSS and the Daisy-UI component library. I probably would not select Daisy-UI for a production build, but I used it because it was a free library that utilized Tailwind. 
+
+Some additional logic can be found in /services/event-services.js
 
 ## Backend
 
-This application also implements a basic REST API that allows for events to be listed, created, and updated. You can view the API files at /pages/api/index.js and /pages/api/eventId.js. I used SQLite for the DB, and Prisma as an ORM for working with the DB. You can view the DB schema at /prisma/schema.prisma
+This application implements a basic REST API that allows for events to be listed, created, and updated. You can view the API files at /pages/api/index.js and /pages/api/eventId.js. I used SQLite for the DB, and Prisma as an ORM for working with the DB. You can view the DB schema at /prisma/schema.prisma
 
+The DB also contains a User table, in which I inserted 4 users which have been assigned as owners. However, I did not expose any endpoints to access Users.  
+
+## Comments
+I had to make some sacrifices due to time constraints. For one, I only supported assigning a single user as an Event owner. I had tried to support multiple users, but was having issues and in order to not spent too much time, I switched to single User, which allowed me not to need an additional Event_User join table. I would have liked for the domains and subdomains to have structured in the DB, rather than just string fields, but I felt this was good enough for this exercise. I also would have liked to have fetched the list of Users to be used in the UI, but I just ended up hard coding this, along with the domain and subdomain names in /utils/ui-schema.js. In a production app, I would not hard code any of these things in the front-end. 

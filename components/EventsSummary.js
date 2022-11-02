@@ -5,9 +5,6 @@ function EventsSummary({ eventsSummary = {} }) {
     <div className="grid grid-cols-3 gap-4">
       {
         availableDomains.map(domain => {
-          if (!eventsSummary[domain.value]) {
-            return <div>nothing here</div>
-          }
           const { ongoing, resolved } = eventsSummary[domain.value];
           return (
             <div key={domain.value} className="card w-64 bg-base-100 shadow-md">

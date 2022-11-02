@@ -55,11 +55,9 @@ function Events() {
   // Event updated callback
   const onEventUpdated = (data) => {
     if (data.id) {
-      console.log("edit event", data)
       updateEventMutation.mutate({...data, ownerId: parseInt(data.ownerId)});
     }
     else {
-      console.log("create new event", data)
       newEventMutation.mutate({...data, ownerId: parseInt(data.ownerId)});
     }      
   }

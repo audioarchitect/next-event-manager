@@ -75,8 +75,6 @@ export function getEventsSummary(events = []) {
     }
   });
 
-  console.log("summary", summary);
-
   return summary; 
 }
 
