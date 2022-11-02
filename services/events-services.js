@@ -1,3 +1,5 @@
+import { availableDomains } from "../utils/ui-schema";
+
 /**
  * Filter and sort events based on filter selections 
  *
@@ -54,28 +56,43 @@ export function filterAndSortEvents({events, filters, sortKey}) {
  * @returns {object} filtered events array
  */
 export function getEventsSummary(events = []) {
-  const summary = {
-    electrical: {
-      ongoing: 0,
-      resolved: 0,
-    },
-    mechanical: {
-      ongoing: 0,
-      resolved: 0,
-    },
-    software: {
-      ongoing: 0, 
-      resolved: 0,
-    }
-  };
+  const summary = {};
 
+  // Initial the summary object for each domain
+  availableDomains.forEach(domain => {  
+    summary[domain.value] = { ongoing: 0, resolved: 0 };
+  });
+  
+  // Iterate through events and increment resolved and ongoing counts for each domain
   events.forEach(event => {
-    if (event.resolvedAt) {
-      summary[event.domain].resolved++;
+    const { domain, resolvedAt } = event;
+
+    if (resolvedAt) {
+      summary[domain].resolved++;
     }
-    summary[event.domain].ongoing++;
+    else {
+      summary[domain].ongoing++;
+    }
   });
 
+  console.log("summary", summary);
 
   return summary; 
+}
+
+/**
+ * Get filter object, to use for dropdown models
+ * 
+ * @apram {object[]} filter category
+ *
+ * @returns {object} filter obj
+ */
+ export function getFilterObject(category) {
+  const result = {};
+
+  category.forEach(item => {
+    result[item.value || item.id] = true;
+  });
+
+  return result;
 }

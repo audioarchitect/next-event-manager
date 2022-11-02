@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import apiUtil from '../../utils/api-util';
-import { filterAndSortEvents, getEventsSummary } from '../../services/events-services';
+import { filterAndSortEvents, getEventsSummary, getFilterObject } from '../../services/events-services';
+import { availableDomains, availableSubdomains, availableUsers } from '../../utils/ui-schema'
 
 import {
   useQuery,
@@ -17,30 +18,14 @@ function Events() {
   // Filter state
   const [filters, setFilters] = useState({
     searchString: '',
-    domain: {
-      electrical: true,
-      mechanical: true,
-      software: true,
-    },
-    subdomain: {
-      robotics: true, 
-      laser: true,
-      power: true,
-      wiring: true,
-      frontend: true,
-      backend: true,
-    },
-    owner: {
-      1: true, 
-      2: true,
-      3: true,
-      4: true,
-    },
+    domain: getFilterObject(availableDomains), 
+    subdomain: getFilterObject(availableSubdomains), 
+    owner: getFilterObject(availableUsers),
     showResolved: true,
-  })
+  });
 
   // Create React Query cliet
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   
   // Set up query and mutation
   const { isLoading, error, data, isFetching } = useQuery(['events'], apiUtil.events.get);
@@ -48,12 +33,12 @@ function Events() {
     onSuccess: () => {
       queryClient.invalidateQueries('events')
     },
-  })
+  });
   const updateEventMutation = useMutation(apiUtil.events.update, {
     onSuccess: () => {
       queryClient.invalidateQueries('events')
     },
-  })
+  });
 
   // Filtered events depends on event data from server, and local filter state
   const filteredEvents = React.useMemo(() => {
